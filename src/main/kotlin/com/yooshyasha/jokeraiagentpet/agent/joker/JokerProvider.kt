@@ -11,12 +11,15 @@ import ai.koog.agents.features.eventHandler.feature.handleEvents
 import ai.koog.prompt.dsl.prompt
 import ai.koog.prompt.executor.clients.openai.OpenAIModels
 import ai.koog.prompt.executor.llms.SingleLLMPromptExecutor
+import ai.koog.prompt.executor.llms.all.simpleOpenAIExecutor
 import com.yooshyasha.jokeraiagentpet.agent.common.IAgentProvider
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
 @Component
 class JokerProvider(
-    private val openAIExecutor: SingleLLMPromptExecutor,
+    private val openAIExecutor: SingleLLMPromptExecutor?,
+    @Value("\${ai.koog.openai.api-key}") private val openAiApiKey: String,
 ) : IAgentProvider<String> {
     override fun provideAgent(handleException: suspend (String) -> Unit): AIAgent<String, String> {
         val strategy = strategy<String, String>("joker-strategy") {
@@ -52,7 +55,7 @@ class JokerProvider(
         )
 
         return AIAgent(
-            promptExecutor = openAIExecutor,
+            promptExecutor = openAIExecutor ?: simpleOpenAIExecutor(openAiApiKey),
             strategy = strategy,
             agentConfig = agentConfig,
         ) {
