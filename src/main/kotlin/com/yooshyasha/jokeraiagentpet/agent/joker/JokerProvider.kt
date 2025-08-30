@@ -55,7 +55,7 @@ class JokerProvider(
         )
 
         return AIAgent(
-            promptExecutor = openAIExecutor ?: simpleOpenAIExecutor(openAiApiKey),
+            promptExecutor = simpleOpenAIExecutor(openAiApiKey),
             strategy = strategy,
             agentConfig = agentConfig,
         ) {
