@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class JokerProvider(
-    private val executor: SingleLLMPromptExecutor,
+    private val openAIExecutor: SingleLLMPromptExecutor,
 ) : IAgentProvider<String> {
     override fun provideAgent(handleException: suspend (String) -> Unit): AIAgent<String, String> {
         val strategy = strategy<String, String>("joker-strategy") {
@@ -52,7 +52,7 @@ class JokerProvider(
         )
 
         return AIAgent(
-            promptExecutor = executor,
+            promptExecutor = openAIExecutor,
             strategy = strategy,
             agentConfig = agentConfig,
         ) {
